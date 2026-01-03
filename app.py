@@ -7,57 +7,15 @@ st.set_page_config(
     layout="centered"
 )
 
-# ---------------- CUSTOM CSS ----------------
-st.markdown("""
-<style>
-/* Main background */
-.stApp {
-    background-color: #0f172a;
-    color: #e5e7eb;
-}
+# ---------------- LOAD EXTERNAL CSS ----------------
+def load_css(file_name):
+    try:
+        with open(file_name) as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.warning("CSS file not found. Using default styling.")
 
-/* Title */
-h1 {
-    color: #f8fafc;
-    font-weight: 700;
-}
-
-/* Subheaders */
-h2, h3 {
-    color: #e2e8f0;
-}
-
-/* File uploader */
-[data-testid="stFileUploader"] {
-    background-color: #020617;
-    padding: 1rem;
-    border-radius: 10px;
-    border: 1px solid #334155;
-}
-
-/* Text area */
-textarea {
-    background-color: #020617 !important;
-    color: #e5e7eb !important;
-    border-radius: 10px !important;
-    border: 1px solid #334155 !important;
-}
-
-/* Success & error boxes */
-.stAlert {
-    border-radius: 10px;
-}
-
-/* Cards */
-.card {
-    background-color: #020617;
-    padding: 1.2rem;
-    border-radius: 12px;
-    border: 1px solid #334155;
-    margin-bottom: 1rem;
-}
-</style>
-""", unsafe_allow_html=True)
+load_css("styles.css")
 
 # ---------------- UI HEADER ----------------
 st.title("📄 Resume Analyzer Tool")
@@ -94,7 +52,7 @@ def detect_sections(text):
 
     results = {}
     for section, keywords in sections.items():
-        results[section] = any(k in text for k in keywords)
+        results[section] = any(keyword in text for keyword in keywords)
 
     return results
 
@@ -104,7 +62,7 @@ if uploaded_file:
 
     resume_text = extract_text_from_pdf(uploaded_file)
 
-    # ---------- EXTRACTED TEXT ----------
+    # ----------- EXTRACTED TEXT CARD -----------
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("📃 Extracted Resume Text (Preview)")
     st.text_area(
@@ -114,7 +72,7 @@ if uploaded_file:
     )
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # ---------- ANALYSIS ----------
+    # ----------- ANALYSIS CARD -----------
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("📊 Resume Structure Analysis")
 
@@ -128,18 +86,18 @@ if uploaded_file:
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # ---------- FEEDBACK ----------
-    missing = [s for s, f in section_status.items() if not f]
+    # ----------- FEEDBACK CARD -----------
+    missing_sections = [s for s, f in section_status.items() if not f]
 
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.subheader("📝 Overall Feedback")
 
-    if not missing:
+    if not missing_sections:
         st.success("🎉 Your resume contains all essential sections.")
     else:
         st.warning(
-            "Consider adding these sections to improve your resume:\n\n"
-            + ", ".join(missing)
+            "To improve your resume, consider adding these sections:\n\n"
+            + ", ".join(missing_sections)
         )
 
     st.markdown('</div>', unsafe_allow_html=True)

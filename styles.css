@@ -1,0 +1,45 @@
+/* Background */
+.stApp {
+    background-color: #0f172a;
+    color: #e5e7eb;
+}
+
+/* Headings */
+h1 {
+    color: #f8fafc;
+    font-weight: 700;
+}
+
+h2, h3 {
+    color: #e2e8f0;
+}
+
+/* File uploader */
+[data-testid="stFileUploader"] {
+    background-color: #020617;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #334155;
+}
+
+/* Text area */
+textarea {
+    background-color: #020617 !important;
+    color: #e5e7eb !important;
+    border-radius: 10px !important;
+    border: 1px solid #334155 !important;
+}
+
+/* Alert boxes */
+.stAlert {
+    border-radius: 10px;
+}
+
+/* Card container */
+.card {
+    background-color: #020617;
+    padding: 1.2rem;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    margin-bottom: 1rem;
+}
